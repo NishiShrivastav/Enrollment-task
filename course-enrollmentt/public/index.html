@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Course Enrollment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 300px;
+    }
+    #output {
+      margin-top: 20px;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Course Enrollment Portal</h1>
+
+  <h3>Enroll in a Course</h3>
+  <input id="studentId" placeholder="Enter Student ID" />
+  <input id="courseId" placeholder="Enter Course ID" />
+  <button onclick="enroll()">Enroll</button>
+
+  <h3>View Enrolled Courses</h3>
+  <input id="checkStudentId" placeholder="Enter Student ID to view courses" />
+  <button onclick="getCourses()">Get Enrolled Courses</button>
+
+  <div id="output"></div>
+
+  <script>
+    async function enroll() {
+      const studentId = document.getElementById('studentId').value;
+      const courseId = document.getElementById('courseId').value;
+
+      const res = await fetch('/api/enroll', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId, courseId })
+      });
+      const data = await res.json();
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+    }
+
+    async function getCourses() {
+      const studentId = document.getElementById('checkStudentId').value;
+      const res = await fetch(`/api/my-courses/${studentId}`);
+      const data = await res.json();
+      document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+    }
+  </script>
+
+</body>
+</html>
